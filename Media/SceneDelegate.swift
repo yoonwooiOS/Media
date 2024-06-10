@@ -21,8 +21,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let nvc = UINavigationController(rootViewController: vc)
         window?.rootViewController = nvc // sb entryPoint
         window?.makeKeyAndVisible()
-       
-        
         
     }
 
