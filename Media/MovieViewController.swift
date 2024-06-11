@@ -21,15 +21,13 @@ class MovieViewController: UIViewController {
         }
         
     }
-    var moiveGenreList:[Genres] = [] {
-        
-        didSet {
-            
-            
-        }
-        
-    }
     
+    var moiveGenreList:[Genres] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,7 +43,7 @@ class MovieViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MovieInfoTableViewCell.self, forCellReuseIdentifier: MovieInfoTableViewCell.identifier)
-        tableView.rowHeight = 500
+        tableView.rowHeight = 480
     }
     
    
@@ -63,6 +61,11 @@ class MovieViewController: UIViewController {
     
     func setUpUI() {
         view.backgroundColor = .white
+        navigationItem.title = "Daily Movie"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(listButtonClicked))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonClicked))
+        
     }
     
     func callRequest() {
@@ -117,6 +120,15 @@ class MovieViewController: UIViewController {
             }
         }
     }
+    @objc func listButtonClicked() {
+        
+        
+    }
+    
+    @objc func searchButtonClicked() {
+        
+        
+    }
 }
 
 extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
@@ -130,8 +142,22 @@ extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
         let data = movieList[indexPath.row]
         cell.setUpCell(data: data)
         
+        
+        guard let firstGenreID = data.genre_ids.first else {
+            cell.genreLabel.text = "장르 없음"
+            return cell
+        }
+
+        if let genre = moiveGenreList.first(where: { $0.id == firstGenreID }) {
+            cell.genreLabel.text = "#" + genre.name
+        } else {
+            cell.genreLabel.text = "장르 없음"
+        }
+        cell.genreLabel.font = .boldSystemFont(ofSize: 18)
+        
         return cell
     }
     
     
 }
+
