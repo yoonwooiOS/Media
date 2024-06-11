@@ -99,7 +99,7 @@ class MovieViewController: UIViewController {
         let url = APIURL.tmdb_genres
         let header: HTTPHeaders = [
             "accept" : "application/json",
-            "Authorization" : APIKey.tmdb_genres
+            "Authorization" : APIKey.tmdbKey
         ]
         
         AF.request(url, method: .get, headers: header)

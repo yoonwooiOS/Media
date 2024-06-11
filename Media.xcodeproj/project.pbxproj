@@ -21,6 +21,9 @@
 		99245F422C17253B0023A63E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 99245F412C17253B0023A63E /* Kingfisher */; };
 		99245F442C175CF60023A63E /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99245F432C175CF60023A63E /* UILabel+Extension.swift */; };
 		99245F462C17600C0023A63E /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99245F452C17600C0023A63E /* UIImageView+Extension.swift */; };
+		99245F552C183D640023A63E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99245F542C183D640023A63E /* SearchViewController.swift */; };
+		99245F572C183EBE0023A63E /* SearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99245F562C183EBE0023A63E /* SearchCollectionViewCell.swift */; };
+		99245F5A2C1851070023A63E /* SearchData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99245F592C1851070023A63E /* SearchData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,9 @@
 		99245F3E2C1722DC0023A63E /* MovieData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieData.swift; sourceTree = "<group>"; };
 		99245F432C175CF60023A63E /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		99245F452C17600C0023A63E /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		99245F542C183D640023A63E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		99245F562C183EBE0023A63E /* SearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		99245F592C1851070023A63E /* SearchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,14 +79,15 @@
 		99245F182C16F50D0023A63E /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				99245F582C1850F30023A63E /* Extension */,
+				99245F532C183D410023A63E /* SearchView */,
+				99245F522C183D380023A63E /* MainView */,
 				99245F3B2C1722C10023A63E /* Model */,
 				99245F192C16F50D0023A63E /* AppDelegate.swift */,
 				99245F1B2C16F50D0023A63E /* SceneDelegate.swift */,
 				99245F222C16F5100023A63E /* Assets.xcassets */,
 				99245F242C16F5100023A63E /* LaunchScreen.storyboard */,
 				99245F272C16F5100023A63E /* Info.plist */,
-				99245F2D2C16F5780023A63E /* MovieViewController.swift */,
-				99245F322C16FD820023A63E /* MovieInfoTableViewCell.swift */,
 				99245F392C1721C90023A63E /* APIKey.swift */,
 			);
 			path = Media;
@@ -90,10 +97,36 @@
 			isa = PBXGroup;
 			children = (
 				99245F3E2C1722DC0023A63E /* MovieData.swift */,
+				99245F592C1851070023A63E /* SearchData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		99245F522C183D380023A63E /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				99245F2D2C16F5780023A63E /* MovieViewController.swift */,
+				99245F322C16FD820023A63E /* MovieInfoTableViewCell.swift */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
+		99245F532C183D410023A63E /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				99245F542C183D640023A63E /* SearchViewController.swift */,
+				99245F562C183EBE0023A63E /* SearchCollectionViewCell.swift */,
+			);
+			path = SearchView;
+			sourceTree = "<group>";
+		};
+		99245F582C1850F30023A63E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
 				99245F432C175CF60023A63E /* UILabel+Extension.swift */,
 				99245F452C17600C0023A63E /* UIImageView+Extension.swift */,
 			);
-			path = Model;
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +213,9 @@
 				99245F442C175CF60023A63E /* UILabel+Extension.swift in Sources */,
 				99245F332C16FD820023A63E /* MovieInfoTableViewCell.swift in Sources */,
 				99245F462C17600C0023A63E /* UIImageView+Extension.swift in Sources */,
+				99245F5A2C1851070023A63E /* SearchData.swift in Sources */,
+				99245F552C183D640023A63E /* SearchViewController.swift in Sources */,
+				99245F572C183EBE0023A63E /* SearchCollectionViewCell.swift in Sources */,
 				99245F1A2C16F50D0023A63E /* AppDelegate.swift in Sources */,
 				99245F3F2C1722DC0023A63E /* MovieData.swift in Sources */,
 				99245F1C2C16F50D0023A63E /* SceneDelegate.swift in Sources */,
