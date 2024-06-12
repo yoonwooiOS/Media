@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let searchVc = SearchViewController()
         let mainNvc = UINavigationController(rootViewController: mainVc)
         let searchNvc = UINavigationController(rootViewController: searchVc)
-        window?.rootViewController = searchVc // sb entryPoint
+        let movieDeatilNvc = UINavigationController(rootViewController: MovieDetailViewController())
+        window?.rootViewController = movieDeatilNvc // sb entryPoint
         window?.makeKeyAndVisible()
         
     }
