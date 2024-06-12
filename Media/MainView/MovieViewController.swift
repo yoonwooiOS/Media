@@ -60,6 +60,12 @@ class MovieViewController: UIViewController {
     }
     
     func setUpUI() {
+        
+        navigationItem.backBarButtonItem?.tintColor = .black
+        let blackBackButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        blackBackButton.tintColor = .black
+        navigationItem.backBarButtonItem = blackBackButton
+        
         view.backgroundColor = .white
         navigationItem.title = "Daily Movie"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(listButtonClicked))
@@ -111,7 +117,7 @@ class MovieViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 print("Success")
-                print(value)
+//                print(value)
                 self.moiveGenreList = value.genres
                 
             case .failure(let error):
@@ -158,6 +164,13 @@ extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
+        let vc = MovieDetailViewController()
+        vc.movieData = movieList[indexPath.row]
+        navigationController?.pushViewController(vc, animated: false)
+
+    }
 }
 

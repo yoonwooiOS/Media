@@ -10,7 +10,7 @@ import SnapKit
 import Alamofire
 
 class MovieDetailViewController: UIViewController {
-
+    
     let moviewImage = UIImageView()
     let overViewTitleLabel = UILabel()
     let overViewTopSeparator = UIView()
@@ -21,13 +21,26 @@ class MovieDetailViewController: UIViewController {
     let castSeperator = UIView()
     let tableView = UITableView()
     
+    var movieData: result?
+    
+    var movieDetail: [Cast] = [] {
+        
+        didSet {
+            
+            tableView.reloadData()
+            
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        callRequestgenres()
         setUpTableView()
         setUphrierachy()
         setUpLayout()
         setUpUi()
+        
     }
     
     func setUphrierachy() {
@@ -49,7 +62,7 @@ class MovieDetailViewController: UIViewController {
         moviewImage.snp.makeConstraints {
             
             $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(180)
+            $0.height.equalTo(200)
             
         }
         
@@ -93,7 +106,7 @@ class MovieDetailViewController: UIViewController {
         
         castTitleLabel.snp.makeConstraints {
             
-            $0.top.equalTo(overViewBottomSeparator.snp.bottom).offset(32)
+            $0.top.equalTo(overViewBottomSeparator.snp.bottom).offset(20)
             $0.leading.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.width.equalTo(60)
             $0.height.equalTo(28)
@@ -117,21 +130,37 @@ class MovieDetailViewController: UIViewController {
     }
     
     func setUpUi() {
+        guard let detailData = movieData else { return }
+
         navigationItem.title = "출연/제작"
+        
         view.backgroundColor = .systemBackground
-        moviewImage.backgroundColor = .blue
-        overViewTitleLabel.backgroundColor = .gray
+        
+        let url = URL(string:  APIKey.imageURL + detailData.poster_path)
+        moviewImage.kf.setImage(with: url)
+        moviewImage.contentMode = .scaleToFill
+        moviewImage.layer.cornerRadius = 5
+        
+        overViewTitleLabel.text = "OverView"
+        overViewTitleLabel.primarySubTitleLabel(fontSize: 16)
+        overViewLabel.text = detailData.overview
+        underChevron.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        underChevron.tintColor = .black
+    
+        castTitleLabel.text = "Cast"
+        castTitleLabel.primarySubTitleLabel(fontSize: 16)
+        
         overViewTopSeparator.backgroundColor = .systemGray4
-        overViewLabel.backgroundColor = .cyan
-        underChevron.backgroundColor = .brown
+        overViewLabel.numberOfLines = 2
+        
         overViewBottomSeparator.backgroundColor = .systemGray4
-        castTitleLabel.backgroundColor = .gray
+       
         castSeperator.backgroundColor = .systemGray4
         tableView.backgroundColor = .green
     }
     
     func setUpTableView() {
-        tableView.rowHeight = 100
+        tableView.rowHeight = 80
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CastListTableViewCell.self, forCellReuseIdentifier: CastListTableViewCell.identifier)
@@ -143,16 +172,18 @@ class MovieDetailViewController: UIViewController {
 extension MovieDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return movieDetail.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CastListTableViewCell.identifier, for: indexPath) as! CastListTableViewCell
+        let cast = movieDetail[indexPath.row]
+        
+        cell.setUpCell(data: cast)
+        
         
         return cell
     }
-    
-    
     
     
     
@@ -164,7 +195,10 @@ extension MovieDetailViewController {
     
     func callRequestgenres() {
         
-        let url = APIURL.tmdb_genres
+        guard let detailData = movieData else { return }
+
+        
+        let url = "https://api.themoviedb.org/3/movie/\(detailData.id)/credits"
         let header: HTTPHeaders = [
             "accept" : "application/json",
             "Authorization" : APIKey.tmdbKey
@@ -172,16 +206,16 @@ extension MovieDetailViewController {
         
         AF.request(url, method: .get, headers: header)
             .validate(statusCode: 200..<500)
-            .responseDecodable(of: Genre.self) { response in
+            .responseDecodable(of: MovieDetail.self) { response in
                 
                 print("STATUS: \(response.response?.statusCode ?? 0)")
                 
                 switch response.result {
                 case .success(let value):
                     print("Success")
-                    print(value)
-                    
-                    
+//                    dump(value)
+                    self.movieDetail = value.cast
+                    print(self.movieDetail)
                 case .failure(let error):
                     print("Failed")
                     print(error)
@@ -195,3 +229,14 @@ extension MovieDetailViewController {
 }
 
 
+extension UILabel {
+    
+    func primarySubTitleLabel(fontSize: CGFloat) {
+        
+        self.textColor = .systemGray
+        self.font = .boldSystemFont(ofSize: fontSize)
+        
+    }
+    
+    
+}

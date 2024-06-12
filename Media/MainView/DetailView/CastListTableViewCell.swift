@@ -14,18 +14,18 @@ class CastListTableViewCell: UITableViewCell {
     static let identifier = "CastListTableViewCell"
     
     let castImage = UIImageView()
-    let castName = UILabel()
+    var castName = UILabel()
     let roleName = UILabel()
-    let roleNumber = UILabel()
-
+    
+   
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-    
         setUphrierachy()
         setUpLayout()
         setUpUi()
-        setUpCell()
+        
         
     }
     
@@ -34,48 +34,73 @@ class CastListTableViewCell: UITableViewCell {
     }
     func setUphrierachy() {
         
+        contentView.addSubview(castImage)
+        contentView.addSubview(castName)
+        contentView.addSubview(roleName)
+       
         
     }
     
     func setUpLayout() {
         
+        castImage.snp.makeConstraints {
+            
+            $0.verticalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(8)
+            $0.height.equalTo(68)
+            $0.width.equalTo(48)
+        }
+        
+        castName.snp.makeConstraints {
+            
+            $0.top.equalTo(contentView.safeAreaLayoutGuide).offset(16)
+            $0.leading.equalTo(castImage.snp.trailing).offset(16)
+            $0.width.equalTo(200)
+            $0.height.equalTo(24)
+            
+        }
+        
+        roleName.snp.makeConstraints {
+            
+            $0.top.equalTo(castName.snp.bottom)
+            $0.leading.equalTo(castImage.snp.trailing).offset(16)
+            $0.width.equalTo(200)
+            $0.height.equalTo(20)
+            
+        }
         
     }
     
     func setUpUi() {
-        
-        
-    }
-    
-    func setUpCell() {
-        
-        
+        castName.primaryTitleLabel(fontSize: 20)
+        roleName.primarySubtitleLabel(fontSize: 14)
         
     }
     
-    
+    func setUpCell(data: Cast) {
+        guard let image = data.profile_path else { return }
+        
+        self.castName.text = data.original_name
+        
+        let url = URL(string:  APIKey.imageURL + image)
+        self.castImage.kf.setImage(with:  url)
+        self.castImage.layer.cornerRadius = 7
+        self.castImage.clipsToBounds = true
+        self.roleName.text = data.character
+    }
 }
 
-#if DEBUG
-import SwiftUI
-struct ViewControllerRepresentable_DBVC: UIViewControllerRepresentable {
+extension UILabel {
     
-    func updateUIViewController(_ uiView: UIViewController,context: Context) {
-        // leave this empty
+    func primaryTitleLabel(fontSize: CGFloat) {
+        
+        self.font = .boldSystemFont(ofSize: fontSize )
+        self.textAlignment = .left
     }
-    @available(iOS 13.0.0, *)
-    func makeUIViewController(context: Context) -> UIViewController{
-        MovieDetailViewController()
+    
+    func primarySubtitleLabel(fontSize: CGFloat) {
+        
+        self.font = .systemFont(ofSize: fontSize )
+        self.textColor = .systemGray3
+        self.textAlignment = .left
     }
 }
-@available(iOS 13.0, *)
-struct ViewControllerRepresentable_DBVC_PreviewProvider: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ViewControllerRepresentable_DBVC()
-                .ignoresSafeArea()
-                .previewDisplayName(/*@START_MENU_TOKEN@*/"Preview"/*@END_MENU_TOKEN@*/)
-        }
-        
-    }
-} #endif
