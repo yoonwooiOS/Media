@@ -13,7 +13,7 @@ class SearchResultDetailViewController: UIViewController {
     
     let searchResultMovieTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "극한직업"
+        label.text = ""
         label.textColor = .white
         label.font = .boldSystemFont(ofSize: 20)
         label.textAlignment = .left
@@ -26,6 +26,18 @@ class SearchResultDetailViewController: UIViewController {
     let recommandColletionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailViewController.collectionViewLayout())
     let posterColletionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailViewController.collectionViewLayout())
     
+    var similarMovieList: SimiarMovie = SimiarMovie(page: 0, results: []) {
+        didSet {
+            similarMovieColletionView.reloadData()
+        }
+    }
+    
+    var recommandMovieList:  RecommandMovie = RecommandMovie(page: 0, results: []) {
+        didSet {
+            recommandColletionView.reloadData()
+        }
+    }
+    var movieInfo: Result?
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,6 +46,8 @@ class SearchResultDetailViewController: UIViewController {
         setUpLayout()
         setUPColletcionView()
         
+        callSimiarMovieAPIRequest()
+        callRecommandMovieAPIRequest()
     }
     private func setUpHierarchy() {
         view.addSubview(searchResultMovieTitleLabel)
@@ -119,25 +133,57 @@ class SearchResultDetailViewController: UIViewController {
         
     }
     
+    func callSimiarMovieAPIRequest() {
+        print( movieInfo?.id,"callreq")
+        guard let id = movieInfo?.id else { return }
+        print(id,"gaurldnet")
+        NetworkManager.callSimilarMovieAPIRequest(movieId: id) { value in
+            self.similarMovieList = value
+            self.searchResultMovieTitleLabel.text = self.movieInfo?.title
+        }
+    }
+    
+    func callRecommandMovieAPIRequest() {
+        
+        guard let id = movieInfo?.id else { return }
+        NetworkManager.callRecommandMovieAPIRequest(movieId: id) { value in
+            self.recommandMovieList = value
+            self.searchResultMovieTitleLabel.text = self.movieInfo?.title
+        }
+        
+        
+    }
 }
 
 
 extension SearchResultDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        
+        if collectionView == similarMovieColletionView {
+            return similarMovieList.results.count
+        } else if collectionView == recommandColletionView {
+            return recommandMovieList.results.count
+        } else {
+            return 0
+        }
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let similarCell = similarMovieColletionView.dequeueReusableCell(withReuseIdentifier: SearchResultDetailCollectionViewCell.identifier, for: indexPath) as! SearchResultDetailCollectionViewCell
         
-        
-        let recommandCell = recommandColletionView.dequeueReusableCell(withReuseIdentifier: SearchResultDetailCollectionViewCell.identifier, for: indexPath) as! SearchResultDetailCollectionViewCell
-        
-        
-        return similarCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultDetailCollectionViewCell.identifier, for: indexPath) as! SearchResultDetailCollectionViewCell
+                
+                if collectionView == similarMovieColletionView {
+                    let movie = similarMovieList.results[indexPath.row]
+                    let imageUrl = APIKey.imageURL + movie.poster_path
+                    cell.setUpSimilarCell(imageString: imageUrl)
+                } else if collectionView == recommandColletionView {
+                    let movie = recommandMovieList.results[indexPath.row]
+                    let imageUrl = APIKey.imageURL + movie.poster_path
+                    cell.setUpRecommandCell(imageString: imageUrl)
+                }
+                
+                return cell
     }
-    
-    
-    
 }
