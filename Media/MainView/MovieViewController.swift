@@ -132,7 +132,8 @@ class MovieViewController: UIViewController {
     }
     
     @objc func searchButtonClicked() {
-        
+        let vc = SearchViewController()
+        navigationController?.pushViewController(vc, animated: true)
         
     }
 }
