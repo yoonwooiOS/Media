@@ -23,7 +23,6 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
         setUpHriearchy()
         setUpLayout()
-        setUpUI()
         
     }
     
@@ -74,11 +73,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func setUpUI() {
-        
-        
-    }
-    
+   
     func setUpCell(data: Result) {
         
         

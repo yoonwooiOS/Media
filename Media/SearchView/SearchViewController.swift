@@ -145,27 +145,12 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return cell
         
     }
-    
-    
-    
-    
-    
-}
-
-extension SearchViewController: UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print(#function)
-        guard let searchText = searchBar.text else { return }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        page = 1
-        callRequest(query: searchText)
-        
+        let vc = SearchResultDetailViewController()
+        navigationController?.pushViewController(vc, animated: true)
         
     }
-    
-    
-    
     
 }
 
@@ -180,11 +165,19 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
                 callRequest(query: searchBar.text!)
                 collectionView.reloadData()
             }
-            
         }
     }
-    
-    
-    
-    
 }
+
+extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print(#function)
+        guard let searchText = searchBar.text else { return }
+        
+        page = 1
+        callRequest(query: searchText)
+    }
+}
+
+
