@@ -27,27 +27,35 @@ class SearchResultDetailCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
-        contentView.backgroundColor = .systemBackground
+       
         contentView.addSubview(movieImage)
         
         movieImage.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
+       
     }
     
     func setUpSimilarCell(imageString: String) {
        
         let url = URL(string: imageString)
         movieImage.kf.setImage(with: url)
-        
+        contentMode = .scaleToFill
     }
     
     func setUpRecommandCell(imageString: String) {
         
         let url = URL(string: imageString)
         movieImage.kf.setImage(with: url)
+        contentMode = .scaleToFill
         
+    }
+    
+    func setUpPosterCell(imageString: String) {
         
+        let url = URL(string: imageString)
+        movieImage.kf.setImage(with: url)
+        contentMode = .scaleToFill
     }
     
     required init?(coder: NSCoder) {

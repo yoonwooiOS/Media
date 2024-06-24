@@ -24,7 +24,7 @@ class SearchResultDetailViewController: UIViewController {
     let posterLabel = WhiteTextColorLabel(text: "포스터")
     let similarMovieColletionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailViewController.collectionViewLayout())
     let recommandColletionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailViewController.collectionViewLayout())
-    let posterColletionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailViewController.collectionViewLayout())
+    let posterColletionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailViewController.posterCollectionViewLayout())
     
     var similarMovieList: SimiarMovie = SimiarMovie(page: 0, results: []) {
         didSet {
@@ -37,17 +37,28 @@ class SearchResultDetailViewController: UIViewController {
             recommandColletionView.reloadData()
         }
     }
+    
+    var moviePosterList: MoviePoster = MoviePoster(backdrops: [Poster(file_path: "")]) {
+        didSet {
+            posterColletionView.reloadData()
+        }
+    }
     var movieInfo: Result?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
+        print(moviePosterList.backdrops.count)
+        view.backgroundColor = .black
         setUpHierarchy()
         setUpLayout()
         setUPColletcionView()
         
         callSimiarMovieAPIRequest()
         callRecommandMovieAPIRequest()
+        callMoviePostAPIRequest()
+        searchResultMovieTitleLabel.text = self.movieInfo?.title
+        similarMovieColletionView.backgroundColor = .black
+        recommandColletionView.backgroundColor = .black
+        posterColletionView.backgroundColor = .black
     }
     private func setUpHierarchy() {
         view.addSubview(searchResultMovieTitleLabel)
@@ -78,7 +89,7 @@ class SearchResultDetailViewController: UIViewController {
         }
         
         recommandLabel.snp.makeConstraints { make in
-            make.top.equalTo(similarMovieColletionView.snp.bottom).offset(16)
+            make.top.equalTo(similarMovieColletionView.snp.bottom).offset(12)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(8)
             make.height.equalTo(30)
         }
@@ -90,15 +101,16 @@ class SearchResultDetailViewController: UIViewController {
         }
         
         posterLabel.snp.makeConstraints { make in
-            make.top.equalTo(recommandColletionView.snp.bottom).offset(16)
+            make.top.equalTo(recommandColletionView.snp.bottom).offset(12)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(8)
             make.height.equalTo(30)
         }
         
         posterColletionView.snp.makeConstraints { make in
-            make.top.equalTo(posterLabel.snp.bottom).offset(4)
+            make.top.equalTo(posterLabel.snp.bottom)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(8)
-            make.height.equalTo(150)
+            make.height.equalTo(240)
+            
         }
         
        
@@ -114,6 +126,9 @@ class SearchResultDetailViewController: UIViewController {
         recommandColletionView.dataSource = self
         recommandColletionView.register(SearchResultDetailCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultDetailCollectionViewCell.identifier)
         
+        posterColletionView.delegate = self
+        posterColletionView.dataSource = self
+        posterColletionView.register(SearchResultDetailCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultDetailCollectionViewCell.identifier)
     }
     
     static func collectionViewLayout() -> UICollectionViewFlowLayout {
@@ -126,7 +141,24 @@ class SearchResultDetailViewController: UIViewController {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 8
         layout.minimumInteritemSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 3, bottom: 10, right: 10)
+        
+        return layout
+        
+        
+    }
+    
+    static func posterCollectionViewLayout() -> UICollectionViewFlowLayout {
+        
+        let layout = UICollectionViewFlowLayout()
+        let width = UIScreen.main.bounds.width
+        let height = UIScreen.main.bounds.height
+        
+        layout.itemSize = CGSize(width: width / 3 , height:  height / 4 )
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 2
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 1, left: 3, bottom: 10, right: 10)
         
         return layout
         
@@ -134,12 +166,11 @@ class SearchResultDetailViewController: UIViewController {
     }
     
     func callSimiarMovieAPIRequest() {
-        print( movieInfo?.id,"callreq")
         guard let id = movieInfo?.id else { return }
-        print(id,"gaurldnet")
+
         NetworkManager.callSimilarMovieAPIRequest(movieId: id) { value in
             self.similarMovieList = value
-            self.searchResultMovieTitleLabel.text = self.movieInfo?.title
+           
         }
     }
     
@@ -148,9 +179,15 @@ class SearchResultDetailViewController: UIViewController {
         guard let id = movieInfo?.id else { return }
         NetworkManager.callRecommandMovieAPIRequest(movieId: id) { value in
             self.recommandMovieList = value
-            self.searchResultMovieTitleLabel.text = self.movieInfo?.title
+           
         }
-        
+    }
+    
+    func callMoviePostAPIRequest() {
+        guard let id = movieInfo?.id else { return }
+        NetworkManager.callMoviePosterPIRequest(movieId: id) { value in
+            self.moviePosterList = value
+        }
         
     }
 }
@@ -164,9 +201,12 @@ extension SearchResultDetailViewController: UICollectionViewDelegate, UICollecti
             return similarMovieList.results.count
         } else if collectionView == recommandColletionView {
             return recommandMovieList.results.count
+        } else if collectionView == posterColletionView {
+            return moviePosterList.backdrops.count
         } else {
             return 0
         }
+        
     }
     
     
@@ -182,6 +222,12 @@ extension SearchResultDetailViewController: UICollectionViewDelegate, UICollecti
                     let movie = recommandMovieList.results[indexPath.row]
                     let imageUrl = APIKey.imageURL + movie.poster_path
                     cell.setUpRecommandCell(imageString: imageUrl)
+                } else if collectionView == posterColletionView {
+                    let movie = moviePosterList.backdrops[indexPath.row]
+                    let imageUrl = APIKey.imageURL + movie.file_path
+                    cell.setUpPosterCell(imageString: imageUrl)
+                } else {
+                    return cell
                 }
                 
                 return cell
