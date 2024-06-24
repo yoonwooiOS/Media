@@ -87,8 +87,6 @@ class SearchViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         navigationItem.title = "영화 검색"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
     }
     
     
