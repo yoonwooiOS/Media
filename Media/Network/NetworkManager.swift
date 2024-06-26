@@ -10,11 +10,11 @@ import Alamofire
 
 class NetworkManager {
     
+    static let shared = NetworkManager()
     
+    private init() { }
     
-    
-    
-    static func callSimilarMovieAPIRequest(movieId: Int, complitionHanlder: @escaping (SimiarMovie) -> ()  ) {
+     func callSimilarMovieAPIRequest(movieId: Int, complitionHanlder: @escaping ([result]) -> Void  ) {
         
         let url = "https://api.themoviedb.org/3/movie/\(movieId)/similar"
         let header: HTTPHeaders = [
@@ -24,7 +24,7 @@ class NetworkManager {
         
         AF.request(url, method: .get, headers: header)
             .validate(statusCode: 200..<500)
-            .responseDecodable(of: SimiarMovie.self) { response in
+            .responseDecodable(of: RelatedMovie.self) { response in
                 
                 print("STATUS: \(response.response?.statusCode ?? 0)")
                 
@@ -32,7 +32,7 @@ class NetworkManager {
             case .success(let value):
                 print("Success")
                 dump(value)
-                complitionHanlder(value)
+                complitionHanlder(value.results)
             case .failure(let error):
                 print("Failed")
                 print(error)
@@ -42,7 +42,7 @@ class NetworkManager {
     }
     
     
-    static func callRecommandMovieAPIRequest(movieId: Int, complitionHanlder: @escaping (RecommandMovie) -> ()  ) {
+     func callRecommandMovieAPIRequest(movieId: Int, complitionHanlder: @escaping ([result]) -> Void  ) {
         
         let url = "https://api.themoviedb.org/3/movie/\(movieId)/recommendations"
         let header: HTTPHeaders = [
@@ -52,7 +52,7 @@ class NetworkManager {
         
         AF.request(url, method: .get, headers: header)
             .validate(statusCode: 200..<500)
-            .responseDecodable(of: RecommandMovie.self) { response in
+            .responseDecodable(of: RelatedMovie.self) { response in
                 
                 print("STATUS: \(response.response?.statusCode ?? 0)")
                 
@@ -60,7 +60,7 @@ class NetworkManager {
             case .success(let value):
                 print("Success")
                 dump(value)
-                complitionHanlder(value)
+                complitionHanlder(value.results)
             case .failure(let error):
                 print("Failed")
                 print(error)
@@ -70,7 +70,7 @@ class NetworkManager {
     }
     
     
-    static func callMoviePosterPIRequest(movieId: Int, complitionHanlder: @escaping (MoviePoster) -> ()  ) {
+     func callMoviePosterPIRequest(movieId: Int, complitionHanlder: @escaping ([Poster]) -> ()  ) {
         
         let url = "https://api.themoviedb.org/3/movie/\(movieId)/images"
         let header: HTTPHeaders = [
@@ -88,7 +88,7 @@ class NetworkManager {
             case .success(let value):
                 print("Success")
                 dump(value)
-                complitionHanlder(value)
+                complitionHanlder(value.backdrops)
             case .failure(let error):
                 print("Failed")
                 print(error)
