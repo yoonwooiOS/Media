@@ -19,7 +19,7 @@ class SearchResultDetailCollectionViewCell2: UICollectionViewCell {
         posterImageView.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
-        posterImageView.backgroundColor = .systemGreen
+        posterImageView.backgroundColor = .white
         
     }
     

@@ -47,10 +47,4 @@ class SearchResultDetailTableViewCell: BaseTableViewCell {
         }
         collectionView.backgroundColor = .white
     }
-    
-    override func setUpView() {
-        
-    }
-    
-    
 }

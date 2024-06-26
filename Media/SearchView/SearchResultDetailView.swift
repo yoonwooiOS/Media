@@ -13,13 +13,13 @@ class SearchResultDetailView: BaseView {
     let searchResultMovieTitleLabel: UILabel = {
         let label = UILabel()
         label.text = ""
-        label.textColor = .white
+        label.textColor = .black
         label.font = .boldSystemFont(ofSize: 14)
         label.numberOfLines = 0
         label.textAlignment = .left
         return label
     }()
-    
+   
     let tableView = {
      let view = UITableView()
         view.rowHeight = 200

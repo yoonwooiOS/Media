@@ -52,9 +52,9 @@ class SearchResultDetailViewController: UIViewController {
         setUpLayout()
         setUPColletcionView()
         
-        callSimiarMovieAPIRequest()
-        callRecommandMovieAPIRequest()
-        callMoviePostAPIRequest()
+        //        callSimiarMovieAPIRequest()
+        //        callRecommandMovieAPIRequest()
+        //        callMoviePostAPIRequest()
         searchResultMovieTitleLabel.text = self.movieInfo?.title
         similarMovieColletionView.backgroundColor = .black
         recommandColletionView.backgroundColor = .black
@@ -113,7 +113,7 @@ class SearchResultDetailViewController: UIViewController {
             
         }
         
-       
+        
         
     }
     
@@ -165,33 +165,33 @@ class SearchResultDetailViewController: UIViewController {
         
     }
     
-    func callSimiarMovieAPIRequest() {
-        guard let id = movieInfo?.id else { return }
-
-        NetworkManager.callSimilarMovieAPIRequest(movieId: id) { value in
-            self.similarMovieList = value
-           
-        }
-    }
-    
-    func callRecommandMovieAPIRequest() {
-        
-        guard let id = movieInfo?.id else { return }
-        NetworkManager.callRecommandMovieAPIRequest(movieId: id) { value in
-            self.recommandMovieList = value
-           
-        }
-    }
-    
-    func callMoviePostAPIRequest() {
-        guard let id = movieInfo?.id else { return }
-        NetworkManager.callMoviePosterPIRequest(movieId: id) { value in
-            self.moviePosterList = value
-        }
-        
-    }
+    //    func callSimiarMovieAPIRequest() {
+    //        guard let id = movieInfo?.id else { return }
+    //
+    //        NetworkManager.callSimilarMovieAPIRequest(movieId: id) { value in
+    //            self.similarMovieList = value
+    //
+    //        }
+    //    }
+    //
+    //    func callRecommandMovieAPIRequest() {
+    //
+    //        guard let id = movieInfo?.id else { return }
+    //        NetworkManager.callRecommandMovieAPIRequest(movieId: id) { value in
+    //            self.recommandMovieList = value
+    //
+    //        }
+    //    }
+    //
+    //    func callMoviePostAPIRequest() {
+    //        guard let id = movieInfo?.id else { return }
+    //        NetworkManager.callMoviePosterPIRequest(movieId: id) { value in
+    //            self.moviePosterList = value
+    //        }
+    //
+    //    }
+    //}
 }
-
 
 extension SearchResultDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
