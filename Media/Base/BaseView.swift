@@ -11,15 +11,14 @@ class BaseView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .white
         setUpHierarchy()
         setUpLayout()
         setUpView()
     }
     func setUpHierarchy() {}
-    func setUpLayout() {}
-    func setUpView() {
-        backgroundColor = .white
-    }
+    func setUpLayout() { }
+    func setUpView() { }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {

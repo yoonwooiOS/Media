@@ -12,17 +12,16 @@ class BaseTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .white
         setUpHierarchy()
         setUpLayout()
         setUpView()
     }
-    func setUpHierarchy() {}
+    func setUpHierarchy() { }
     
-    func setUpLayout() {}
+    func setUpLayout() { }
     
-    func setUpView() {
-        backgroundColor = .white
-    }
+    func setUpView() { }
 
     
     @available(*, unavailable)
