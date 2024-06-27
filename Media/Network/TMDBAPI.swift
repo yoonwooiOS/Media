@@ -14,7 +14,8 @@ enum TMDBAPI {
     case similarMovie(query: Int)
     case recommandMovie(query: Int)
     case moviePoster(query: Int)
-    
+    case genres
+    case cast(query: Int)
     var baseURL: String {
         return "https://api.themoviedb.org/3/"
     }
@@ -31,6 +32,10 @@ enum TMDBAPI {
             return URL(string: baseURL + "search/movie?")!
         case .moviePoster(query: let movieId):
             return URL(string: baseURL + "movie/\(movieId)/images")!
+        case .genres:
+            return URL(string: baseURL + "genre/movie/list")!
+        case .cast(query: let query):
+            return URL(string: baseURL + "movie/\(query)/credits")!
         }
     }
     var header: HTTPHeaders {
@@ -46,13 +51,25 @@ enum TMDBAPI {
         case .trendingMovie:
             return ["language" : "ko-KR"]
         case .similarMovie(query: let movieId):
-            return ["query" : movieId]
+            return ["query" : movieId,
+                    "language" : "ko-KR"
+            ]
         case .recommandMovie(query: let movieId):
-            return ["query" : movieId]
+            return ["query" : movieId,
+                    "language" : "ko-KR"
+            ]
         case .search(query: let movie):
-            return ["query" : movie]
+            return ["query" : movie,
+                    "language" : "ko-KR"
+            ]
         case .moviePoster(query: let movieId):
-            return ["query" : movieId]
+            return ["query" : movieId,
+                    "language" : "ko-KR"]
+        case .genres:
+            return ["language" : "ko-KR"]
+        case .cast(query: let movieId):
+            return ["query" : movieId,
+                    "language" : "ko-KR"]
         }
     }
 }
