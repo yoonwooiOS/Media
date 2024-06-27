@@ -13,8 +13,15 @@ struct MoviePoster: Decodable {
     
 }
 
-struct Poster: Decodable {
+struct Poster: Decodable, MoviePosterImage {
+    let posterImage: String
     
-    let file_path: String
-    
+    enum CodingKeys: String, CodingKey {
+        case posterImage = "file_path"
+    }
+}
+
+
+protocol MoviePosterImage {
+    var posterImage: String { get }
 }

@@ -7,14 +7,21 @@
 
 import Foundation
 
-struct SimiarMovie: Decodable {
-    let page: Int
+struct SRMovie: Decodable {
+//    let page: Int
     let results: [Results]
 }
 
-struct Results: Decodable {
+struct Results: Decodable, MoviePosterImage {
+    let posterImage: String
     
-    let poster_path: String
-    
+    enum CodingKeys: String, CodingKey {
+        case posterImage = "poster_path"
+    }
 }
 
+//let a: [MoviePosterImage] = [Results(posterImage: ""), Poster(posterImage: "")]
+
+//for movie in a {
+//    movie.posterImage
+//}

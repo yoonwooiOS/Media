@@ -215,7 +215,7 @@ extension MovieDetailViewController {
                     print("Success")
 //                    dump(value)
                     self.movieDetail = value.cast
-                    print(self.movieDetail)
+//                    print(self.movieDetail)
                 case .failure(let error):
                     print("Failed")
                     print(error)

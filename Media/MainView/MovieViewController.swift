@@ -75,7 +75,7 @@ class MovieViewController: UIViewController {
     }
     
     func callRequest() {
-    
+
         let url = APIURL.tmdb
         let header: HTTPHeaders = [
             "accept" : "application/json",

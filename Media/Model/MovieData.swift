@@ -7,14 +7,13 @@
 
 import Foundation
 
-struct Movie:Decodable {
+struct Movie: Decodable {
     
     let results:[result]
     
     
 }
-
-struct result:Decodable {
+struct result: Decodable {
     
     let overview: String
     let poster_path: String
