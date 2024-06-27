@@ -14,88 +14,67 @@ class NetworkManager {
     
     private init() { }
     
-     func callSimilarMovieAPIRequest(movieId: Int, complitionHanlder: @escaping ([result]) -> Void  ) {
+    typealias RelativeMovieComplitionHandler = ([MoviePosterImage]?, String?) -> Void
+    func tmdbRelativeMovieAPI(api: TMDBAPI, RelativeMovieComplitionHandler: @escaping RelativeMovieComplitionHandler  ) {
         
-        let url = "https://api.themoviedb.org/3/movie/\(movieId)/similar"
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
+        AF.request(api.endPoint,
+                   method: api.method,
+                   parameters: api.parameter,
+                   headers: api.header)
+           .validate(statusCode: 200..<500)
+           .responseDecodable(of: SRMovie.self) { response in
+               
+               print("STATUS: \(response.response?.statusCode ?? 0)")
+               
+           switch response.result {
+           case .success(let value):
+               print("Success")
+//                dump(value)
+               RelativeMovieComplitionHandler(value.results, nil)
+           case .failure(let error):
+               print("Failed")
+               print(error)
+               RelativeMovieComplitionHandler(nil, "잠시후 다시 시도해주세요")
+           }
+       }
+       
+   }
+    
+    typealias PosterComplitionHandler = ([Poster]?, String?) -> Void
+    func tmdbMoviePosterAPI(api: TMDBAPI, PosterComplitionHandler: @escaping PosterComplitionHandler  ) {
         
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: RelatedMovie.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                
-            switch response.result {
-            case .success(let value):
-                print("Success")
-                dump(value)
-                complitionHanlder(value.results)
-            case .failure(let error):
-                print("Failed")
-                print(error)
-            }
-        }
-        
+        AF.request(api.endPoint,
+                   method: api.method,
+                   parameters: api.parameter,
+                   headers: api.header)
+           .validate(statusCode: 200..<500)
+           .responseDecodable(of: MoviePoster.self) { response in
+               
+               print("STATUS: \(response.response?.statusCode ?? 0)")
+               
+           switch response.result {
+           case .success(let value):
+               print("Success")
+    //                dump(value)
+               PosterComplitionHandler(value.backdrops, nil)
+           case .failure(let error):
+               print("Failed")
+               print(error)
+               PosterComplitionHandler(nil, "잠시후 다시 시도해주세요")
+           }
+       }
+       
     }
     
-    
-     func callRecommandMovieAPIRequest(movieId: Int, complitionHanlder: @escaping ([result]) -> Void  ) {
+    func trendingMovie() {
         
-        let url = "https://api.themoviedb.org/3/movie/\(movieId)/recommendations"
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
         
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: RelatedMovie.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                
-            switch response.result {
-            case .success(let value):
-                print("Success")
-                dump(value)
-                complitionHanlder(value.results)
-            case .failure(let error):
-                print("Failed")
-                print(error)
-            }
-        }
         
-    }
-    
-    
-     func callMoviePosterPIRequest(movieId: Int, complitionHanlder: @escaping ([Poster]) -> ()  ) {
         
-        let url = "https://api.themoviedb.org/3/movie/\(movieId)/images"
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
-        
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: MoviePoster.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                
-            switch response.result {
-            case .success(let value):
-                print("Success")
-                dump(value)
-                complitionHanlder(value.backdrops)
-            case .failure(let error):
-                print("Failed")
-                print(error)
-            }
-        }
         
     }
     
     
 }
+
+
