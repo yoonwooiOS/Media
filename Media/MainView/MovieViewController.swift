@@ -34,8 +34,8 @@ class MovieViewController: UIViewController {
         setUphriearchy()
         setUpLayout()
         setUpUI()
-        callRequest()
-        callRequestgenres()
+        callRequestMovie()
+        
     }
     
     func setUphriearchy() {
@@ -53,10 +53,7 @@ class MovieViewController: UIViewController {
         tableView.snp.makeConstraints {
             
             $0.edges.equalTo(view.safeAreaLayoutGuide)
-            
         }
-        
-        
     }
     
     func setUpUI() {
@@ -74,58 +71,40 @@ class MovieViewController: UIViewController {
         
     }
     
-    func callRequest() {
-
-        let url = APIURL.tmdb
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
+    func callRequestMovie() {
+        let group = DispatchGroup()
         
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: Movie.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                
-            switch response.result {
-            case .success(let value):
-                print("Success")
-                print(value)
-                self.movieList = value.results
-                
-            case .failure(let error):
-                print("Failed")
-                print(error)
+        group.enter()
+        DispatchQueue.global().async(group: group) {
+            NetworkManager.shared.requestMovie(api: .trendingMovie, model: Movie.self) { value, error in
+                if let error {
+                    print(error, "트렌드 무비 통신에러")
+                } else {
+                    guard let movie = value?.results else { return }
+                    self.movieList = movie
+                }
+                group.leave()
+            }
+        }
+        
+        group.enter()
+        DispatchQueue.global().async(group: group) {
+            NetworkManager.shared.requestMovie(api: .genres, model: Genre.self) { value, error in
+                if let error {
+                    print(error,"장르 통신 에러")
+                } else {
+                    guard let genres = value?.genres else { return }
+                    self.moiveGenreList = genres
+                    
+                }
+                group.leave()
+            }
+            group.notify(queue: .main) {
+                self.tableView.reloadData()
             }
         }
     }
-    func callRequestgenres() {
-    
-        let url = APIURL.tmdb_genres
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
-        
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: Genre.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                
-            switch response.result {
-            case .success(let value):
-                print("Success")
-//                print(value)
-                self.moiveGenreList = value.genres
-                
-            case .failure(let error):
-                print("Failed")
-                print(error)
-            }
-        }
-    }
+   
     @objc func listButtonClicked() {
         
         

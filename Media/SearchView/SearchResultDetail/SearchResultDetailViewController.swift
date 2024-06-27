@@ -36,11 +36,18 @@ class SearchResultDetailViewController: BaseViewController {
                 if let error = error {
                     print(error)
                 } else {
-                    guard let movie = movie else { return }
+                    guard let movie = movie else {
+                        group.leave()
+                        return }
                     self.movieImageList[0] = movie
                 }
+                print(Thread.isMainThread)
+                print("안임")
+                group.leave()
             }
-            group.leave()
+            print(Thread.isMainThread)
+            print("밖임")
+            
         }
         group.enter()
         DispatchQueue.global().async(group: group) {
@@ -53,8 +60,12 @@ class SearchResultDetailViewController: BaseViewController {
                     self.movieImageList[1] = movie
                     
                 }
+                print(Thread.isMainThread)
+                print("안임")
+                group.leave()
             }
-            group.leave()
+            print(Thread.isMainThread)
+            print("밖임")
         }
         group.enter()
         DispatchQueue.global().async(group: group) {
@@ -64,9 +75,13 @@ class SearchResultDetailViewController: BaseViewController {
                 } else {
                     guard let movie = poster else { return }
                     self.movieImageList[2] = movie
+                    dump(movie)
                 }
+                print(Thread.isMainThread)
+                print("안임")
+                group.leave()
             }
-            group.leave()
+            print("밖")
         }
         group.notify(queue: .main) {
             self.mainView.tableView.reloadData()

@@ -16,8 +16,6 @@ struct MovieDetail: Decodable {
 
 struct Cast: Decodable {
     
-    
-    
     let original_name: String
     let profile_path: String?
     let character: String

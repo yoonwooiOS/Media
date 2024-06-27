@@ -35,7 +35,7 @@ class MovieDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        callRequestgenres()
+        callRequestCast()
         setUpTableView()
         setUphrierachy()
         setUpLayout()
@@ -193,34 +193,44 @@ extension MovieDetailViewController: UITableViewDelegate, UITableViewDataSource 
 
 extension MovieDetailViewController {
     
-    func callRequestgenres() {
+    func callRequestCast() {
+        guard let movieData = movieData else { return }
+        NetworkManager.shared.requestMovie(api: .cast(query: movieData.id), model: MovieDetail.self) { value, error in
+            if let error = error {
+                print(error, "Cast Error")
+            } else {
+                guard let cast = value?.cast else { return }
+                self.movieDetail = cast
+            }
+        }
         
-        guard let detailData = movieData else { return }
+        
+        
 
         
-        let url = "https://api.themoviedb.org/3/movie/\(detailData.id)/credits"
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
-        
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: MovieDetail.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                
-                switch response.result {
-                case .success(let value):
-                    print("Success")
-//                    dump(value)
-                    self.movieDetail = value.cast
-//                    print(self.movieDetail)
-                case .failure(let error):
-                    print("Failed")
-                    print(error)
-                }
-            }
+//        let url = "https://api.themoviedb.org/3/movie/\(detailData.id)/credits"
+//        let header: HTTPHeaders = [
+//            "accept" : "application/json",
+//            "Authorization" : APIKey.tmdbKey
+//        ]
+//        
+//        AF.request(url, method: .get, headers: header)
+//            .validate(statusCode: 200..<500)
+//            .responseDecodable(of: MovieDetail.self) { response in
+//                
+//                print("STATUS: \(response.response?.statusCode ?? 0)")
+//                
+//                switch response.result {
+//                case .success(let value):
+//                    print("Success")
+////                    dump(value)
+//                    self.movieDetail = value.cast
+////                    print(self.movieDetail)
+//                case .failure(let error):
+//                    print("Failed")
+//                    print(error)
+//                }
+//            }
         
         
         

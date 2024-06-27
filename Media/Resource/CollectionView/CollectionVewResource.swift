@@ -22,7 +22,15 @@ enum CollectionVewResource {
         static let scrollDirection:  UICollectionView.ScrollDirection = .horizontal
     }
     
-    static func layout(itemWidth width: Int, itemHeight hight: Int, minimumLineSpacing: CGFloat, minimumInteritemSpacing: CGFloat, sectionInetTop top: CGFloat, sectionInetLeft left: CGFloat, sectionInetBottom bottom: CGFloat, sectionInetRight right: CGFloat) -> UICollectionViewLayout {
+    // 파라미터 초기값 사용 
+    static func layout(itemWidth width: Int = 10,
+                       itemHeight hight: Int,
+                       minimumLineSpacing: CGFloat,
+                       minimumInteritemSpacing: CGFloat,
+                       sectionInetTop top: CGFloat,
+                       sectionInetLeft left: CGFloat,
+                       sectionInetBottom bottom: CGFloat,
+                       sectionInetRight right: CGFloat) -> UICollectionViewLayout {
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: width, height: hight)

@@ -16,13 +16,9 @@ class SearchViewController: UIViewController {
     
     let colletciontView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
     var list = SearchMovie(page: 0, results: [], total_pages: 0, total_results: 0) {
-        
         didSet {
-            
             colletciontView.reloadData()
-            
         }
-        
     }
     
     var page = 1
@@ -38,10 +34,7 @@ class SearchViewController: UIViewController {
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
         return layout
-        
-        
     }
     
     override func viewDidLoad() {
@@ -89,8 +82,17 @@ class SearchViewController: UIViewController {
         navigationItem.title = "영화 검색"
     }
     
+
+    
     
     func callRequest(query: String) {
+        NetworkManager.shared.requestMovie(api: .search(query: ""), model: SearchMovie.self) { value , error in
+            if let error = error {
+                print(error, "searchError")
+            }
+        }
+        
+        
         print("텅신")
         let url = APIURL.tmdb_Search + "?query=\(query)&page=\(page)"
         let header: HTTPHeaders = [
@@ -103,22 +105,18 @@ class SearchViewController: UIViewController {
             .responseDecodable(of: SearchMovie.self) { response in
                 
                 print("STATUS: \(response.response?.statusCode ?? 0)")
-                
                 switch response.result {
                 case .success(let value):
                     print("Success")
                     dump(value)
-                    
                     if self.page == 1 {
                         self.list = value
                     } else {
                         self.list.results.append(contentsOf: value.results)
                     }
-                   
                     if self.page == 1{
                         
                         self.colletciontView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
-                        
                     }
                     
                 case .failure(let error):
@@ -145,7 +143,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let vc = SearchResultDetailViewController2()
+        let vc = SearchResultDetailViewController()
         vc.movieInfo = list.results[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
         
@@ -162,6 +160,8 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
                 page += 1
                 
                 callRequest(query: searchBar.text!)
+                
+                
                 collectionView.reloadData()
             }
         }
@@ -176,6 +176,7 @@ extension SearchViewController: UISearchBarDelegate {
         
         page = 1
         callRequest(query: searchText)
+       
     }
 }
 
