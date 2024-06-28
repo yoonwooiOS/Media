@@ -74,7 +74,7 @@ class MovieViewController: UIViewController {
     func callRequestMovie() {
         let group = DispatchGroup()
         
-        group.enter()
+//        group.enter()
         DispatchQueue.global().async(group: group) {
             NetworkManager.shared.requestMovie(api: .trendingMovie, model: Movie.self) { value, error in
                 if let error {
@@ -82,12 +82,13 @@ class MovieViewController: UIViewController {
                 } else {
                     guard let movie = value?.results else { return }
                     self.movieList = movie
+                    print(movie,"dsfadsadasdsadas")
                 }
-                group.leave()
+//                group.leave()
             }
         }
         
-        group.enter()
+//        group.enter()
         DispatchQueue.global().async(group: group) {
             NetworkManager.shared.requestMovie(api: .genres, model: Genre.self) { value, error in
                 if let error {
@@ -95,11 +96,13 @@ class MovieViewController: UIViewController {
                 } else {
                     guard let genres = value?.genres else { return }
                     self.moiveGenreList = genres
-                    
+                    print(genres, "12312312321321321312312321321312")
                 }
-                group.leave()
+//                group.leave()
+                
             }
             group.notify(queue: .main) {
+                print("notify")
                 self.tableView.reloadData()
             }
         }

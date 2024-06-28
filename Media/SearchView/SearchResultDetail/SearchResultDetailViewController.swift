@@ -28,7 +28,7 @@ class SearchResultDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let movieInfo = movieInfo else { return  }
-        
+       
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global().async(group: group) {
