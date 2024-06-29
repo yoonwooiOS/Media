@@ -17,19 +17,8 @@ class SearchResultDetailTableViewCell: BaseTableViewCell {
         view.textColor = .black
         return view
     }()
-    
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: SearchResultDetailTableViewCell.layout())
-    
-    static func layout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: CollectionVewResource.SearchDetailCollectionViewLayout.itemWidth.rawValue, height: CollectionVewResource.SearchDetailCollectionViewLayout.itemHeight.rawValue)
-        layout.minimumLineSpacing = CGFloat(CollectionVewResource.SearchDetailCollectionViewLayout.minimumLineSpacing)
-        layout.minimumInteritemSpacing = CollectionVewResource.SearchDetailCollectionViewLayout.minimumInteritemSpacing
-        layout.sectionInset = UIEdgeInsets(top: CollectionVewResource.SearchDetailCollectionViewLayout.insetTop, left: CollectionVewResource.SearchDetailCollectionViewLayout.insetLeft, bottom: CollectionVewResource.SearchDetailCollectionViewLayout.insetBottom, right: CollectionVewResource.SearchDetailCollectionViewLayout.insetRight
-        )
-        layout.scrollDirection = CollectionVewResource.SearchDetailCollectionViewLayout.scrollDirection
-        return layout
-    }
+   
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionVewResource.layout())
     
     override func setUpHierarchy() {
         contentView.addSubview(titleLabel)
@@ -38,7 +27,7 @@ class SearchResultDetailTableViewCell: BaseTableViewCell {
     
     override func setUpLayout() {
         titleLabel.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(contentView).inset(20)
+            make.top.horizontalEdges.equalTo(contentView).inset(8)
             make.height.equalTo(20)
         }
         collectionView.snp.makeConstraints { make in
@@ -48,4 +37,5 @@ class SearchResultDetailTableViewCell: BaseTableViewCell {
         }
         collectionView.backgroundColor = .white
     }
+    
 }

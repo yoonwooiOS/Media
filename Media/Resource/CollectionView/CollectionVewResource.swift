@@ -23,14 +23,14 @@ enum CollectionVewResource {
     }
     
     // 파라미터 초기값 사용 
-    static func layout(itemWidth width: Int = 10,
-                       itemHeight hight: Int,
-                       minimumLineSpacing: CGFloat,
-                       minimumInteritemSpacing: CGFloat,
-                       sectionInetTop top: CGFloat,
-                       sectionInetLeft left: CGFloat,
-                       sectionInetBottom bottom: CGFloat,
-                       sectionInetRight right: CGFloat) -> UICollectionViewLayout {
+    static func layout(itemWidth width: Int = 120,
+                       itemHeight hight: Int = 160,
+                       minimumLineSpacing: CGFloat = 10,
+                       minimumInteritemSpacing: CGFloat = 0,
+                       sectionInetTop top: CGFloat = 0,
+                       sectionInetLeft left: CGFloat = 20,
+                       sectionInetBottom bottom: CGFloat = 0,
+                       sectionInetRight right: CGFloat = 0) -> UICollectionViewLayout {
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: width, height: hight)
