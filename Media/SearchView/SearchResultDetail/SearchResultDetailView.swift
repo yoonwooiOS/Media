@@ -14,7 +14,7 @@ class SearchResultDetailView: BaseView {
         let label = UILabel()
         label.text = ""
         label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 14)
+        label.font = .boldSystemFont(ofSize: 20)
         label.numberOfLines = 0
         label.textAlignment = .left
         return label
@@ -46,7 +46,7 @@ class SearchResultDetailView: BaseView {
         
         tableView.snp.makeConstraints { make in
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
-            make.top.equalTo(searchResultMovieTitleLabel.snp.bottom).offset(4)
+            make.top.equalTo(searchResultMovieTitleLabel.snp.bottom)
             
         }
     }

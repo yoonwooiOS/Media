@@ -7,7 +7,13 @@
 
 import Foundation
 
+protocol MoviePosterImage {
+    var posterImage: String { get }
+}
+
+
 struct MoviePoster: Decodable {
+    
     
     let backdrops: [Poster]
     
@@ -22,6 +28,3 @@ struct Poster: Decodable, MoviePosterImage {
 }
 
 
-protocol MoviePosterImage {
-    var posterImage: String { get }
-}

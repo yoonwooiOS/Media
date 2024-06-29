@@ -204,10 +204,7 @@ extension MovieDetailViewController {
             }
         }
         
-        
-        
 
-        
 //        let url = "https://api.themoviedb.org/3/movie/\(detailData.id)/credits"
 //        let header: HTTPHeaders = [
 //            "accept" : "application/json",
