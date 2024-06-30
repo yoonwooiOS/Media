@@ -15,7 +15,7 @@ protocol MoviePosterImage {
 struct MoviePoster: Decodable {
     
     
-    let backdrops: [Poster]
+    let backdrops: [Poster]?
     
 }
 

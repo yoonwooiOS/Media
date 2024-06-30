@@ -1,5 +1,5 @@
 //
-//  SimiarMovie.swift
+//  SimiarRecommandMovie.swift
 //  Media
 //
 //  Created by 김윤우 on 6/24/24.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct SRMovie: Decodable {
+struct SimiarRecommandMovie: Decodable {
 //    let page: Int
-    let results: [Results]
+    let results: [Results]?
 }
 
 struct Results: Decodable, MoviePosterImage {

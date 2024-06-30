@@ -9,7 +9,7 @@ import Foundation
 
 struct Movie: Decodable {
     
-    let results:[result]
+    let results:[result]?
     
     
 }
@@ -25,7 +25,7 @@ struct result: Decodable {
 
 struct Genre: Decodable{
     
-    let genres: [Genres]
+    let genres: [Genres]?
     
 }
 
