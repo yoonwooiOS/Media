@@ -45,7 +45,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
         movieImage.snp.makeConstraints {
             
             $0.edges.equalTo(contentView.safeAreaLayoutGuide).inset(8)
-            $0.size.equalTo(100)
+
         }
         
         gradeString.snp.makeConstraints {

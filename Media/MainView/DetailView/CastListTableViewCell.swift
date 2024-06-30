@@ -44,28 +44,24 @@ class CastListTableViewCell: UITableViewCell {
     func setUpLayout() {
         
         castImage.snp.makeConstraints {
-            
-            $0.verticalEdges.leading.equalTo(contentView.safeAreaLayoutGuide).inset(8)
-            $0.height.equalTo(68)
-            $0.width.equalTo(48)
+            $0.top.equalToSuperview().offset(8)
+            $0.bottom.equalToSuperview().offset(-8)
+            $0.leading.equalToSuperview().offset(8)
+            $0.width.equalTo(contentView.snp.height).multipliedBy(12.0 / 17.0)
         }
         
         castName.snp.makeConstraints {
-            
             $0.top.equalTo(contentView.safeAreaLayoutGuide).offset(16)
             $0.leading.equalTo(castImage.snp.trailing).offset(16)
             $0.width.equalTo(200)
             $0.height.equalTo(24)
-            
         }
         
         roleName.snp.makeConstraints {
-            
             $0.top.equalTo(castName.snp.bottom)
             $0.leading.equalTo(castImage.snp.trailing).offset(16)
             $0.width.equalTo(200)
             $0.height.equalTo(20)
-            
         }
         
     }
@@ -73,7 +69,6 @@ class CastListTableViewCell: UITableViewCell {
     func setUpUi() {
         castName.primaryTitleLabel(fontSize: 20)
         roleName.primarySubtitleLabel(fontSize: 14)
-        
     }
     
     func setUpCell(data: Cast) {
@@ -92,7 +87,6 @@ class CastListTableViewCell: UITableViewCell {
 extension UILabel {
     
     func primaryTitleLabel(fontSize: CGFloat) {
-        
         self.font = .boldSystemFont(ofSize: fontSize )
         self.textAlignment = .left
     }
