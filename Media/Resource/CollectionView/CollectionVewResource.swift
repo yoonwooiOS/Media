@@ -22,6 +22,20 @@ enum CollectionVewResource {
         static let scrollDirection:  UICollectionView.ScrollDirection = .horizontal
     }
     
+    enum SearchCollectionViewLayout {
+        
+        static let itemWidth: Int = Int(UIScreen.main.bounds.width - 40)
+        static let itemHeight: Int = Int(UIScreen.main.bounds.height - 24)
+        static let minimumLineSpacing: CGFloat  = 10
+        static let minimumInteritemSpacing: CGFloat = 10
+        static let insetTop: CGFloat = 10
+        static let insetLeft: CGFloat = 10
+        static let insetBottom: CGFloat = 10
+        static let insetRight: CGFloat = 10
+        static let scrollDirection:  UICollectionView.ScrollDirection = .vertical
+        
+    }
+    
     // 파라미터 초기값 사용 
     static func layout(itemWidth width: Int = 120,
                        itemHeight hight: Int = 160,
