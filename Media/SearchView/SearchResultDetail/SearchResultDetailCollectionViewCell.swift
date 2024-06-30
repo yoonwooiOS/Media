@@ -9,7 +9,6 @@ import UIKit
 
 class SearchResultDetailCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "SearchResultDetailCollectionViewCell2"
     let posterImageView = UIImageView()
     
     override init(frame: CGRect) {
@@ -19,10 +18,9 @@ class SearchResultDetailCollectionViewCell: UICollectionViewCell {
         posterImageView.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
-        posterImageView.backgroundColor = .white
+        posterImageView.backgroundColor = .systemGray5
         
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

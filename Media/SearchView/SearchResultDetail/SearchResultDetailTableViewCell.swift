@@ -8,7 +8,6 @@
 import UIKit
 
 class SearchResultDetailTableViewCell: BaseTableViewCell {
-    static let identifier = "SearchResultDetailTableViewCell"
     
     var titleLabel = {
         let view = UILabel()

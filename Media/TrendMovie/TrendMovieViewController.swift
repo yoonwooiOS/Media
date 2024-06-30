@@ -9,105 +9,53 @@ import UIKit
 import SnapKit
 import Alamofire
 
-class MovieViewController: UIViewController {
+class TrendMovieViewController: BaseViewController {
     
-    let tableView = UITableView()
+    let mainView = TrendMovieView()
     var movieList:[result] = [] {
-    
         didSet {
-            
-            tableView.reloadData()
-            
+            mainView.tableView.reloadData()
         }
-        
     }
     
     var moiveGenreList:[Genres] = [] {
         didSet {
-            tableView.reloadData()
+            mainView.tableView.reloadData()
         }
     }
-        
+   
+    override func loadView() {
+        view = mainView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setUphriearchy()
-        setUpLayout()
-        setUpUI()
+     
         callRequestMovie()
-        
+        setUpNavigationBar()
+        setUpTableView()
     }
     
-    func setUphriearchy() {
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(MovieInfoTableViewCell.self, forCellReuseIdentifier: MovieInfoTableViewCell.identifier)
-        tableView.rowHeight = 480
-    }
     
-   
-    
-    func setUpLayout() {
-       
-        tableView.snp.makeConstraints {
-            
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
-    func setUpUI() {
-        
+    func setUpNavigationBar() {
         navigationItem.backBarButtonItem?.tintColor = .black
         let blackBackButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         blackBackButton.tintColor = .black
         navigationItem.backBarButtonItem = blackBackButton
         
         view.backgroundColor = .white
-        navigationItem.title = "Daily Movie"
+        navigationItem.title = "오늘의 영화"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(listButtonClicked))
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonClicked))
+    }
+   
+    func setUpTableView() {
+        
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
         
     }
     
-    func callRequestMovie() {
-        let group = DispatchGroup()
-        
-//        group.enter()
-        DispatchQueue.global().async(group: group) {
-            NetworkManager.shared.requestMovie(api: .trendingMovie, model: Movie.self) { value, error in
-                if let error {
-                    print(error, "트렌드 무비 통신에러")
-                } else {
-                    guard let movie = value?.results else { return }
-                    self.movieList = movie
-                    print(movie,"dsfadsadasdsadas")
-                }
-//                group.leave()
-            }
-        }
-        
-//        group.enter()
-        DispatchQueue.global().async(group: group) {
-            NetworkManager.shared.requestMovie(api: .genres, model: Genre.self) { value, error in
-                if let error {
-                    print(error,"장르 통신 에러")
-                } else {
-                    guard let genres = value?.genres else { return }
-                    self.moiveGenreList = genres
-                    print(genres, "12312312321321321312312321321312")
-                }
-//                group.leave()
-                
-            }
-            group.notify(queue: .main) {
-                print("notify")
-                self.tableView.reloadData()
-            }
-        }
-    }
-   
     @objc func listButtonClicked() {
         
         
@@ -119,8 +67,47 @@ class MovieViewController: UIViewController {
         
     }
 }
-
-extension MovieViewController: UITableViewDelegate, UITableViewDataSource {
+extension TrendMovieViewController {
+    
+    func callRequestMovie() {
+        let group = DispatchGroup()
+        
+        group.enter()
+       
+            NetworkManager.shared.requestMovie(api: .trendingMovie, model: Movie.self) { value, error in
+                if let error {
+                    print(error, "트렌드 무비 통신에러")
+                } else {
+                    guard let movie = value?.results else { return }
+                    self.movieList = movie
+                    print(movie,"dsfadsadasdsadas")
+                }
+                group.leave()
+            }
+        
+        
+        group.enter()
+        
+            NetworkManager.shared.requestMovie(api: .genres, model: Genre.self) { value, error in
+                if let error {
+                    print(error,"장르 통신 에러")
+                } else {
+                    guard let genres = value?.genres else { return }
+                    self.moiveGenreList = genres
+                    print(genres, "12312312321321321312312321321312")
+                }
+                group.leave()
+                
+            }
+            group.notify(queue: .main) {
+                print("notify")
+                self.mainView.tableView.reloadData()
+            }
+        
+    }
+    
+}
+extension TrendMovieViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movieList.count

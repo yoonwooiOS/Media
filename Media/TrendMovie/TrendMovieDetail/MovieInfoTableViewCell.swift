@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class MovieInfoTableViewCell: UITableViewCell {
+class MovieInfoTableViewCell: BaseTableViewCell {
     
     static let identifier = "MovieInfoTableViewCell"
     
@@ -27,35 +27,16 @@ class MovieInfoTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setUphrierachy()
-        setUpLayout()
-        setUpUI()
-        
-        
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setUphrierachy() {
-        
-        contentView.addSubview(releaseDateLabel)
-        contentView.addSubview(genreLabel)
-        contentView.addSubview(layoutView)
-        contentView.addSubview(movieImage)
+    override func setUpHierarchy() {
+        [releaseDateLabel, genreLabel, layoutView, movieImage, movieTitleLabel, movieInfoLable, contourImage, gotodetailViewLabel, chevronimage ].forEach {
+            self.addSubview($0)
+        }
         movieImage.addSubview(gradeStringLabel)
         movieImage.addSubview(gradeNumberLable)
-        contentView.addSubview(movieTitleLabel)
-        contentView.addSubview(movieInfoLable)
-        contentView.addSubview(contourImage)
-        contentView.addSubview(gotodetailViewLabel)
-        contentView.addSubview(chevronimage)
-        
     }
-    
-    func setUpLayout() {
+   
+    override func setUpLayout() {
         releaseDateLabel.snp.makeConstraints {
             $0.top.equalTo(contentView.safeAreaLayoutGuide).offset(16)
             $0.leading.equalTo(contentView.safeAreaLayoutGuide).offset(32)
@@ -134,10 +115,6 @@ class MovieInfoTableViewCell: UITableViewCell {
             $0.height.equalTo(20)
             
         }
-        
-    }
-    
-    func setUpUI() {
         
     }
     

@@ -11,131 +11,37 @@ import Alamofire
 
 class SearchViewController: UIViewController {
     
-    
-    let searchBar = UISearchBar()
-    
-    let colletciontView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
-    var list = SearchMovie(page: 0, results: [], total_pages: 0, total_results: 0) {
-        didSet {
-            colletciontView.reloadData()
-        }
-    }
-    
-    var page = 1
-    
-    static func collectionViewLayout() -> UICollectionViewFlowLayout {
-        
-        let layout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.width - 40
-        let height = UIScreen.main.bounds.height - 24
-        // cell 크기
-        layout.itemSize = CGSize(width: width / 3, height:  height / 5 )
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        return layout
+    let mainView = SearchView()
+   
+    override func loadView() {
+        view = mainView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        colletciontView.dataSource = self
-        colletciontView.delegate = self
-        colletciontView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
-        colletciontView.prefetchDataSource = self
-        searchBar.delegate = self
-        setUpHriearchy()
-        setUpLayout()
-        setUpUI()
-        
+        mainView.collectionView.dataSource = self
+        mainView.collectionView.delegate = self
+        mainView.collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
+        mainView.collectionView.prefetchDataSource = self
+        mainView.searchBar.delegate = self
+        setUpNavigationItem()
     }
     
-    func setUpHriearchy() {
-        
-        view.addSubview(searchBar)
-        view.addSubview(colletciontView)
-        
-    }
+    func setUpNavigationItem() {
     
-    // escaping closure
-    func setUpLayout() {
-        searchBar.snp.makeConstraints {
-            
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            
-        }
-        
-        colletciontView.snp.makeConstraints {
-            
-            $0.top.equalTo(searchBar.snp.bottom)
-            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
-            
-        }
-        
-    }
-    
-    func setUpUI() {
-        
-        view.backgroundColor = .systemBackground
         navigationItem.title = "영화 검색"
-    }
-    
-
-    
-    
-    func callRequest(query: String) {
-        NetworkManager.shared.requestMovie(api: .search(query: ""), model: SearchMovie.self) { value , error in
-            if let error = error {
-                print(error, "searchError")
-            }
-        }
-        
-        
-        print("텅신")
-        let url = APIURL.tmdb_Search + "?query=\(query)&page=\(page)"
-        let header: HTTPHeaders = [
-            "accept" : "application/json",
-            "Authorization" : APIKey.tmdbKey
-        ]
-        
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<500)
-            .responseDecodable(of: SearchMovie.self) { response in
-                
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                switch response.result {
-                case .success(let value):
-                    print("Success")
-                    dump(value)
-                    if self.page == 1 {
-                        self.list = value
-                    } else {
-                        self.list.results.append(contentsOf: value.results)
-                    }
-                    if self.page == 1{
-                        
-                        self.colletciontView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
-                    }
-                    
-                case .failure(let error):
-                    print("Failed")
-                    print(error)
-                }
-            }
     }
 }
 
-
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return list.results.count
+        return mainView.list.results.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as! SearchCollectionViewCell
-        let data = list.results[indexPath.row]
+        let data = mainView.list.results[indexPath.row]
         cell.setUpCell(data: data)
         
         return cell
@@ -144,7 +50,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let vc = SearchResultDetailViewController()
-        vc.movieInfo = list.results[indexPath.row]
+        vc.movieInfo = mainView.list.results[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -155,11 +61,29 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         print(#function)
         for item in indexPaths {
-            print(page, list.total_pages)
-            if list.results.count - 2 == item.row &&  page != list.total_pages  {
-                page += 1
+//            print(page, list.total_pages)
+            if mainView.list.results.count - 2 == item.row &&  mainView.page != mainView.list.total_pages  {
+                mainView.page += 1
+                guard let searchText = mainView.searchBar.text else { return }
+                NetworkManager.shared.requestMovie(api: .search(query: searchText), model: SearchMovie.self) { value, error in
+                    if let error = error {
+                        print(error, "error")
+                    } else if value != nil {
+                        print("Success")
+                        dump(value)
+                        guard let value = value else { return }
+                        
+                        if self.mainView.page == 1 {
                 
-                callRequest(query: searchBar.text!)
+                            self.mainView.list = value
+                        } else {
+                            self.mainView.list.results.append(contentsOf: value.results)
+                        }
+                        if self.mainView.page == 1{
+                            self.mainView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+                        }
+                    }
+                }
                 
                 
                 collectionView.reloadData()
@@ -169,14 +93,36 @@ extension SearchViewController: UICollectionViewDataSourcePrefetching {
 }
 
 extension SearchViewController: UISearchBarDelegate {
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        mainView.searchBar.resignFirstResponder()
+    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print(#function)
+        mainView.searchBar.resignFirstResponder()
         guard let searchText = searchBar.text else { return }
         
-        page = 1
-        callRequest(query: searchText)
-       
+        mainView.page = 1
+//        callRequest(query: searchText)
+        NetworkManager.shared.requestMovie(api: .search(query: searchText), model: SearchMovie.self) { value, error in
+            if let error = error {
+                print(error, "error")
+            } else if value != nil {
+                print("Success")
+                dump(value)
+                guard let value = value else { return }
+                
+                if self.mainView.page == 1 {
+        
+                    self.mainView.list = value
+                } else {
+                    self.mainView.list.results.append(contentsOf: value.results)
+                }
+                if self.mainView.page == 1{
+                    self.mainView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+                }
+            }
+        }
     }
 }
 

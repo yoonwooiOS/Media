@@ -17,7 +17,6 @@ class SearchCollectionViewCell: UICollectionViewCell {
     let gradeNumber = UILabel()
     let movieTitle = UILabel()
     
-    static let identifier = "SearchCollectionViewCell"
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -30,14 +29,11 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
         fatalError("init(coder:) has not been implemented")
     }
+    
     func setUpHriearchy() {
-        
-        contentView.addSubview(movieImage)
-        contentView.addSubview(gradeString)
-        contentView.addSubview(gradeNumber)
-        contentView.addSubview(movieTitle)
-        
-        
+        [movieImage, gradeString, gradeNumber, movieTitle].forEach {
+            self.addSubview($0)
+        }
     }
     
     func setUpLayout() {
@@ -75,8 +71,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     
    
     func setUpCell(data: Result) {
-        
-        
+        movieImage.backgroundColor = .systemGray5
         let url = URL(string: APIKey.imageURL + (data.poster_path ?? ""))
         movieImage.kf.setImage(with: url)
         movieTitle.primarySubtitleLabel(text: data.title, textColor: .black, fontSize: 10, textAlignment: .center, backgroundColor: .clear)
