@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Alamofire
 
-class SearchViewController: UIViewController {
+class SearchViewController: BaseViewController {
     
     let mainView = SearchView()
    

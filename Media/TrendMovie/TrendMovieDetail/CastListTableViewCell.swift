@@ -9,39 +9,32 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class CastListTableViewCell: UITableViewCell {
+class CastListTableViewCell: BaseTableViewCell {
     
     static let identifier = "CastListTableViewCell"
     
-    let castImage = UIImageView()
-    var castName = UILabel()
-    let roleName = UILabel()
+    let castImage = {
+        let view = UIImageView()
+        return view
+    }()
+    var castName = {
+        let view = UILabel()
+        view.primaryTitleLabel(fontSize: 20)
+        return view
+    }()
+    let roleName = {
+        let view = UILabel()
+        view.primarySubtitleLabel(fontSize: 14)
+        return view
+    }()
     
-   
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setUphrierachy()
-        setUpLayout()
-        setUpUi()
-        
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    func setUphrierachy() {
-        
+    override func setUpHierarchy() {
         contentView.addSubview(castImage)
         contentView.addSubview(castName)
         contentView.addSubview(roleName)
-       
-        
     }
-    
-    func setUpLayout() {
+   
+    override func setUpLayout() {
         
         castImage.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
@@ -66,9 +59,9 @@ class CastListTableViewCell: UITableViewCell {
         
     }
     
-    func setUpUi() {
-        castName.primaryTitleLabel(fontSize: 20)
-        roleName.primarySubtitleLabel(fontSize: 14)
+    override func setUpView() {
+        
+        
     }
     
     func setUpCell(data: Cast) {

@@ -121,7 +121,7 @@ class MovieInfoTableViewCell: BaseTableViewCell {
     func setUpCell(data:result ) {
         
         let url = URL(string: APIKey.imageURL + data.poster_path)
-        
+        let formattedVoteAverage = String(format: "%.1f", data.vote_average)
         movieImage.primaryImageView(contentMode: .scaleToFill, cornerRadius: 4)
         layoutView.layer.shadowOffset = CGSize(width: 50, height: 50)
         layoutView.layer.shadowOpacity = 0.6
@@ -136,7 +136,7 @@ class MovieInfoTableViewCell: BaseTableViewCell {
         movieTitleLabel.primaryTitleLabel(text: data.title, textColor: .black, fontSize: 20, textAlignment: .left, backgroundColor: .clear)
         movieInfoLable.primarySubtitleLabel(text: data.overview, textColor: .systemGray, fontSize: 16, textAlignment: .left, backgroundColor: .clear)
         gradeStringLabel.primarySubtitleLabel(text: "평점", textColor: .white, fontSize: 12, textAlignment: .center, backgroundColor: .systemBlue)
-        gradeNumberLable.primarySubtitleLabel(text: "3.3", textColor: .black, fontSize: 12, textAlignment: .center, backgroundColor: .white)
+        gradeNumberLable.primarySubtitleLabel(text: formattedVoteAverage, textColor: .black, fontSize: 12, textAlignment: .center, backgroundColor: .white)
         contourImage.backgroundColor = .black
         gotodetailViewLabel.primarySubtitleLabel(text: "자세히 보기", textColor: .black, fontSize: 14, textAlignment: .left, backgroundColor: .clear)
         

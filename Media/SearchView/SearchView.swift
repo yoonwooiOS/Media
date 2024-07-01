@@ -7,10 +7,10 @@
 
 import UIKit
 
-class SearchView: BaseView {
-    let searchBar = UISearchBar()
+final class SearchView: BaseView {
+     let searchBar = UISearchBar()
     
-    let collectionView = {
+     let collectionView = {
         let view = UICollectionView(
             frame: .zero,
             collectionViewLayout: SearchView.collectionViewLayout()
@@ -20,7 +20,7 @@ class SearchView: BaseView {
         
     }()
     
-    var list = SearchMovie(page: 0, results: [], total_pages: 0, total_results: 0) {
+     var list = SearchMovie(page: 0, results: [], total_pages: 0, total_results: 0) {
         didSet {
             collectionView.reloadData()
         }
@@ -71,7 +71,7 @@ class SearchView: BaseView {
     override func setUpView() {
         backgroundColor = .white
     }
-    func setupGestureRecognizer() {
+    private func setupGestureRecognizer() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
             tapGesture.cancelsTouchesInView = false // 다른 터치 이벤트가 그대로 동작
             addGestureRecognizer(tapGesture)
