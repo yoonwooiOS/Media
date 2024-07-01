@@ -8,7 +8,7 @@
 import Foundation
 
 struct Movie: Decodable {
-    
+
     let results:[result]?
     
     
@@ -21,6 +21,7 @@ struct result: Decodable {
     let release_date: String
     let genre_ids: [Int]
     let id: Int
+    let vote_average: Double
 }
 
 struct Genre: Decodable{

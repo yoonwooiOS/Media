@@ -9,10 +9,9 @@ import UIKit
 import SnapKit
 import Alamofire
 
-class MovieDetailViewController: UIViewController {
+class MovieDetailViewController: BaseViewController {
     
    let mainView = MovieDetailView()
-    
     var movieData: result?
     
     
@@ -23,14 +22,13 @@ class MovieDetailViewController: UIViewController {
         super.viewDidLoad()
         callRequestCast()
         setUpTableView()
-       
-        setUpUi()
+        setUpgesture()
         
+        setUpNavigationItem()
     }
     
    
-    
-    func setUpUi() {
+    override func setUpView() {
         guard let detailData = movieData else { return }
 
         navigationItem.title = "출연/제작"
@@ -41,15 +39,29 @@ class MovieDetailViewController: UIViewController {
         mainView.overViewLabel.text = detailData.overview
        
     }
-    
+    func setUpgesture() {
+        mainView.moviewImage.isUserInteractionEnabled = true
+        mainView.moviewImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageClicked)))
+    }
     func setUpTableView() {
        
         mainView.tableView.dataSource = self
         mainView.tableView.delegate = self
-        
+    }
+    func setUpNavigationItem() {
+        navigationItem.backBarButtonItem?.tintColor = .black
+        let blackBackButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        blackBackButton.tintColor = .black
+        navigationItem.backBarButtonItem = blackBackButton
+    }
+    @objc func imageClicked() {
+        print(#function)
+        let vc = MovieTrailerViewController()
+        guard let movieId = movieData?.id else { return }
+        vc.movieID = movieId
+        navigationController?.pushViewController(vc, animated: true)
         
     }
-    
 }
 
 extension MovieDetailViewController: UITableViewDelegate, UITableViewDataSource {

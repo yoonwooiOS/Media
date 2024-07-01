@@ -16,7 +16,7 @@ enum TMDBAPI {
     case moviePoster(query: Int)
     case genres
     case cast(query: Int)
-    
+    case video(query: Int)
     
     var baseURL: String {
         return "https://api.themoviedb.org/3/"
@@ -38,6 +38,8 @@ enum TMDBAPI {
             return baseURL + "genre/movie/list"
         case .cast(query: let query):
             return baseURL + "movie/\(query)/credits"
+        case .video(query: let query):
+            return baseURL + "movie/\(query)/videos"
         }
     }
     var header: HTTPHeaders {
@@ -71,6 +73,8 @@ enum TMDBAPI {
         case .cast(query: let movieId):
             return ["query" : movieId,
                     "language" : "ko-KR"]
+        case .video(query: let movieId):
+            return ["query" : movieId]
         }
     }
 }
